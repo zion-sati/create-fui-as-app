@@ -1,0 +1,34 @@
+{
+  "name": "__PACKAGE_NAME__",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Scaffolded FUI-AS routed app",
+  "scripts": {
+    "build": "npm run generate:host && npm run build:assets && npm run build:wasm && npm run build:harness",
+    "build:assets": "tsx scripts/prepare-runtime.ts",
+    "build:wasm": "npm run build:wasm:home && npm run build:wasm:settings",
+    "build:wasm:home": "asc src/routes/HomeApp.ts --config asconfig.json --target release --outFile public/home.wasm",
+    "build:wasm:settings": "asc src/routes/SettingsApp.ts --config asconfig.json --target release --outFile public/settings.wasm",
+    "build:harness": "esbuild harness.ts --bundle --format=esm --platform=browser --outfile=public/harness.js",
+    "generate:host-services": "tsx ./node_modules/@effindomv2/fui-as/scripts/generate-host-services.ts src/host/host-services.ts appHostServices src/host/generated/HostServices.ts ../../fui/FuiPrimitives",
+    "generate:host-events": "tsx ./node_modules/@effindomv2/fui-as/scripts/generate-host-events.ts src/host/host-events.ts appHostEvents src/host/generated/HostEvents.ts ../../fui/FuiPrimitives",
+    "generate:host": "npm run generate:host-services && npm run generate:host-events",
+    "watch": "chokidar \"src/**/*.ts\" \"harness.ts\" \"route-shell.html\" \"index.html\" \"asconfig.json\" --ignore \"src/host/generated/**\" -c \"npm run build\"",
+    "serve": "serve public --listen 8080",
+    "dev": "npm run build && concurrently -k -n watch,serve \"npm run watch\" \"npm run serve\"",
+    "test": "npm run build && tsx scripts/smoke.ts"
+  },
+  "dependencies": {
+    "@effindomv2/fui-as": "__FUI_AS_VERSION__",
+    "@effindomv2/runtime": "__RUNTIME_VERSION__"
+  },
+  "devDependencies": {
+    "assemblyscript": "0.28.17",
+    "chokidar-cli": "^3.0.0",
+    "concurrently": "^9.2.1",
+    "esbuild": "^0.27.7",
+    "serve": "^14.2.5",
+    "tsx": "^4.20.6"
+  }
+}

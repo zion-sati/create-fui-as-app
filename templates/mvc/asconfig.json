@@ -1,0 +1,24 @@
+{
+  "targets": {
+    "debug": {
+      "debug": true,
+      "exportRuntime": true,
+      "bindings": "esm",
+      "outFile": "public/app.wasm",
+      "sourceMap": true,
+      "textFile": "public/app.wat"
+    },
+    "release": {
+      "exportRuntime": true,
+      "bindings": "esm",
+      "optimizeLevel": 3,
+      "outFile": "public/app.wasm",
+      "shrinkLevel": 1,
+      "sourceMap": false,
+      "textFile": "public/app.wat"
+    }
+  },
+  "options": {
+    "runtime": "stub"
+  }
+}
