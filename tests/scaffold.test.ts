@@ -17,9 +17,15 @@ test("createProject writes hello-world scaffold including AssemblyScript tsconfi
     const tsconfig = JSON.parse(readFileSync(join(target, "tsconfig.json"), "utf8")) as {
       extends: string;
       include: string[];
+      compilerOptions?: {
+        paths?: Record<string, string[]>;
+      };
     };
     assert.equal(tsconfig.extends, "assemblyscript/std/assembly.json");
     assert.deepEqual(tsconfig.include, ["src/**/*.ts"]);
+    assert.deepEqual(tsconfig.compilerOptions?.paths?.["@effindomv2/fui-as/src/*"], [
+      "./node_modules/@effindomv2/fui-as/src/*",
+    ]);
 
     const packageJson = JSON.parse(readFileSync(join(target, "package.json"), "utf8")) as {
       scripts: Record<string, string>;
@@ -31,6 +37,10 @@ test("createProject writes hello-world scaffold including AssemblyScript tsconfi
     assert.equal(readFileSync(join(target, "src", "HelloWorld.ts"), "utf8").includes("Hello world"), true);
     assert.equal(readFileSync(join(target, "README.md"), "utf8").includes("Hello World scaffold guide"), true);
     assert.equal(readFileSync(join(target, "src", "fui", "Fui.ts"), "utf8").includes("@effindomv2/fui-as/src/Fui"), true);
+    assert.deepEqual(
+      JSON.parse(readFileSync(join(target, "src", "host", "tsconfig.json"), "utf8")).compilerOptions.lib,
+      ["ES2022", "DOM"],
+    );
     assert.equal(readFileSync(join(target, "src", "host", "host-events.ts"), "utf8").includes("appHostEvents"), true);
     assert.equal(readFileSync(join(target, "src", "host", "host-services.ts"), "utf8").includes("appHostServices"), true);
     assert.equal(readFileSync(join(target, "src", "host", "generated", "HostEvents.ts"), "utf8").includes("onAppClockTick"), true);
@@ -67,6 +77,14 @@ test("createProject writes mvc scaffold when template is mvc", () => {
     );
     assert.equal(readFileSync(join(target, "src", "routes", "HomeApp.ts"), "utf8").includes("createManagedApplication"), true);
     assert.equal(readFileSync(join(target, "README.md"), "utf8").includes("MVC scaffold guide"), true);
+    assert.deepEqual(
+      JSON.parse(readFileSync(join(target, "tsconfig.json"), "utf8")).compilerOptions.paths["@effindomv2/fui-as/src/*"],
+      ["./node_modules/@effindomv2/fui-as/src/*"],
+    );
+    assert.deepEqual(
+      JSON.parse(readFileSync(join(target, "src", "host", "tsconfig.json"), "utf8")).compilerOptions.lib,
+      ["ES2022", "DOM"],
+    );
     assert.equal(readFileSync(join(target, "src", "host", "host-events.ts"), "utf8").includes("appHostEvents"), true);
     assert.equal(readFileSync(join(target, "src", "host", "host-services.ts"), "utf8").includes("appHostServices"), true);
     assert.equal(readFileSync(join(target, "src", "fui", "Fui.ts"), "utf8").includes("@effindomv2/fui-as/src/Fui"), true);

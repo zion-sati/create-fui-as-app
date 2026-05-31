@@ -1,9 +1,21 @@
 {
   "extends": "assemblyscript/std/assembly.json",
   "compilerOptions": {
-    "noEmit": true
+    "noEmit": true,
+    "paths": {
+      "@effindomv2/fui-as/src/*": [
+        "./node_modules/@effindomv2/fui-as/src/*"
+      ],
+      "@effindomv2/fui-as/browser/src/*": [
+        "./node_modules/@effindomv2/fui-as/browser/src/*"
+      ]
+    }
   },
   "include": [
     "src/**/*.ts"
+  ],
+  "exclude": [
+    "src/host/host-events.ts",
+    "src/host/host-services.ts"
   ]
 }
