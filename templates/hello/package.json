@@ -6,15 +6,20 @@
   "description": "Scaffolded FUI-AS hello-world app",
   "scripts": {
     "build": "npm run generate:host && npm run build:assets && npm run build:wasm && npm run build:harness",
+    "build:dev": "npm run generate:host && npm run build:assets && npm run build:wasm:dev && npm run build:harness",
+    "publish": "npm run generate:host && npm run build:assets && npm run build:wasm:publish && npm run build:harness && npm run publish:stage",
     "build:assets": "tsx scripts/prepare-runtime.ts",
     "build:wasm": "asc src/App.ts --config asconfig.json --target release",
+    "build:wasm:dev": "asc src/App.ts --config asconfig.json --target debug",
+    "build:wasm:publish": "asc src/App.ts --config asconfig.json --target release --optimizeLevel 3 --shrinkLevel 2 --noAssert",
     "build:harness": "esbuild harness.ts --bundle --format=esm --platform=browser --outfile=public/harness.js",
     "generate:host-services": "tsx ./node_modules/@effindomv2/fui-as/scripts/generate-host-services.ts src/host/host-services.ts appHostServices src/host/generated/HostServices.ts ../../fui/FuiPrimitives",
     "generate:host-events": "tsx ./node_modules/@effindomv2/fui-as/scripts/generate-host-events.ts src/host/host-events.ts appHostEvents src/host/generated/HostEvents.ts ../../fui/FuiPrimitives",
     "generate:host": "npm run generate:host-services && npm run generate:host-events",
-    "watch": "chokidar \"src/**/*.ts\" \"harness.ts\" \"index.html\" \"asconfig.json\" --ignore \"src/host/generated/**\" -c \"npm run build\"",
+    "publish:stage": "rm -rf published && mkdir -p published && cp -R public/. published/ && cp -f index.html published/index.html",
+    "watch": "chokidar \"src/**/*.ts\" \"harness.ts\" \"index.html\" \"asconfig.json\" --ignore \"src/host/generated/**\" -c \"npm run build:dev\"",
     "serve": "serve public --listen 8080",
-    "dev": "npm run build && concurrently -k -n watch,serve \"npm run watch\" \"npm run serve\"",
+    "dev": "npm run build:dev && concurrently -k -n watch,serve \"npm run watch\" \"npm run serve\"",
     "test": "npm run build && tsx scripts/smoke.ts"
   },
   "dependencies": {

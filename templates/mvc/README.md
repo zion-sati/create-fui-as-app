@@ -24,4 +24,5 @@ The routed harness is optimized for fast navigation:
 1. Add/modify page behavior inside `home/` or `settings/` controllers/models/views.
 2. Add new routes by creating another `*App.ts` entrypoint plus a new route folder and route record in `harness.ts`.
 3. Keep shared browser bridge capabilities in `src/host/*.ts`, then regenerate with `npm run generate:host`.
-4. Use `npm run dev` for local routed iteration.
+4. Use `npm run dev` for local routed iteration (uses debug AssemblyScript builds for faster rebuilds).
+5. Use `npm run publish` for an optimized release build staged under `published/`.

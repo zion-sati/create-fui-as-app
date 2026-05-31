@@ -32,6 +32,10 @@ test("createProject writes hello-world scaffold including AssemblyScript tsconfi
     };
     assert.equal(typeof packageJson.scripts.dev, "string");
     assert.equal(typeof packageJson.scripts.build, "string");
+    assert.equal(typeof packageJson.scripts.publish, "string");
+    assert.equal(typeof packageJson.scripts["publish:stage"], "string");
+    assert.equal(typeof packageJson.scripts["build:dev"], "string");
+    assert.equal(typeof packageJson.scripts["build:wasm:dev"], "string");
     assert.equal(typeof packageJson.scripts.test, "string");
     assert.equal(typeof packageJson.scripts["generate:host"], "string");
     assert.equal(readFileSync(join(target, "src", "HelloWorld.ts"), "utf8").includes("Hello world"), true);
@@ -68,6 +72,12 @@ test("createProject writes mvc scaffold when template is mvc", () => {
     };
     assert.equal(typeof packageJson.scripts["build:wasm:home"], "string");
     assert.equal(typeof packageJson.scripts["build:wasm:settings"], "string");
+    assert.equal(typeof packageJson.scripts.publish, "string");
+    assert.equal(typeof packageJson.scripts["publish:stage"], "string");
+    assert.equal(typeof packageJson.scripts["build:dev"], "string");
+    assert.equal(typeof packageJson.scripts["build:wasm:dev"], "string");
+    assert.equal(typeof packageJson.scripts["build:wasm:dev:home"], "string");
+    assert.equal(typeof packageJson.scripts["build:wasm:dev:settings"], "string");
     assert.equal(typeof packageJson.scripts["generate:host"], "string");
     assert.equal(
       readFileSync(join(target, "src", "routes", "home", "HomeController.ts"), "utf8").includes(

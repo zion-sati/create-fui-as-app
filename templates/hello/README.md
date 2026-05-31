@@ -13,7 +13,8 @@ This template is the smallest FUI-AS app shape:
 1. Build UI from `src/App.ts` with controls/nodes from `./fui/Fui`.
 2. Split real features into more files under `src/` and compose them in `App.ts`.
 3. If browser-owned capabilities are needed (for example shell APIs), add definitions in `src/host/*.ts` and run `npm run generate:host`.
-4. Run `npm run dev` while iterating.
+4. Run `npm run dev` while iterating (uses debug AssemblyScript builds for faster rebuilds).
+5. Run `npm run publish` for an optimized release build staged under `published/`.
 
 ## Architecture intent
 
