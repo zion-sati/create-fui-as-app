@@ -36,8 +36,7 @@ export class HomeView {
       new FlexBox().height(16.0, Unit.Pixel),
       this.actionButton,
     )
-      .width(100.0, Unit.Percent)
-      .height(100.0, Unit.Percent)
+      .fillSize()
       .padding(24.0, 24.0, 24.0, 24.0);
 
     this.root = new SelectionArea()
