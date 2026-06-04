@@ -12,6 +12,32 @@ This template scaffolds a multi-route FUI-AS app with explicit page-level MVC.
 - `route-shell.html` is the per-route host shell copied for each route path.
 - `src/host/host-services.ts` and `src/host/host-events.ts` are app-owned bridge contracts; `src/host/generated/*` is generated output.
 
+## Staging project assets
+
+`stage-assets.json` is a convention-over-configuration manifest for copying project-owned files into `public/runtime/` during `npm run build:assets`. You should never need to edit `scripts/prepare-runtime.ts` — just drop files into your project and declare them here.
+
+```json
+{
+  "stage": {
+    "fonts/*.ttf": "fonts",
+    "images/**":   "images"
+  }
+}
+```
+
+- **Keys** are **glob patterns** relative to the project root. Supported patterns:
+  - `"*.ext"` — all files with a given extension in the project root.
+  - `"dir/*.ext"` — all files matching the extension inside `dir/` (non-recursive).
+  - `"dir/**"` — copy the entire `dir/` tree recursively.
+- **Values** are the **destination subdirectory** under `public/runtime/`. The value can be a nested path like `"fonts/custom"` and directories are created automatically.
+- The config is optional — if `stage-assets.json` is missing, the build script skips staging with no error.
+
+For example, to ship custom fonts alongside the bundled Noto set:
+
+1. Place your `.ttf` files in a `fonts/` directory at the project root.
+2. Add `"fonts/*.ttf": "fonts"` to `stage-assets.json`.
+3. Reference them in app code as `/runtime/fonts/YourFont.ttf`.
+
 ## Routing + deployment model
 
 Each route builds to its own wasm (`home.wasm`, `settings.wasm`) and is mounted by routed harness config. This is designed for true MFE slices: each route app can evolve and deploy independently while still sharing the same browser host/runtime contract.
