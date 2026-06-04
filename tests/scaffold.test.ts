@@ -103,7 +103,10 @@ test("createProject writes mvc scaffold when template is mvc", () => {
       readFileSync(join(target, "src", "host", "generated", "HostServices.ts"), "utf8").includes("appClockNowUnixSeconds"),
       true,
     );
-    assert.equal(readFileSync(join(target, "route-shell.html"), "utf8").includes("FUI-AS Routed Demo"), true);
+    const routeShell = readFileSync(join(target, "route-shell.html"), "utf8");
+    assert.equal(routeShell.includes("FUI-AS Routed Demo"), false);
+    assert.equal(routeShell.includes('class="app-shell"'), true);
+    assert.equal(routeShell.includes('data-effindom-canvas-size-source'), true);
   } finally {
     rmSync(root, { recursive: true, force: true });
   }

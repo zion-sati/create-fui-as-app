@@ -14,6 +14,7 @@ function renderLoadingOverlay(template: string): string {
     .replace("{{LOADING_OVERLAY_STYLES}}", loadingOverlayStyles)
     .replace("{{LOADING_OVERLAY_BODY}}", loadingOverlayBody);
 }
+
 rmSync(outputDir, { recursive: true, force: true });
 mkdirSync(`${outputDir}/runtime`, { recursive: true });
 for (const route of resolvedManifest.routes) {
@@ -31,7 +32,7 @@ writeFileSync(
   'window.__effindomRuntime = Object.assign({}, window.__effindomRuntime, { manifestUrl: "./runtime/dist/effindom.v2.manifest.json" });\n',
   "utf8",
 );
-copyFileSync("favicon.svg", `${outputDir}/favicon.svg`);
+copyFileSync("favicon.ico", `${outputDir}/favicon.ico`);
 const defaultRoute = resolvedManifest.routes.length == 0 ? undefined : resolvedManifest.routes[0];
 const defaultRouteTitle = defaultRoute == null ? "FUI-AS Routed App" : defaultRoute.title;
 const defaultRouteHref = defaultRoute == null ? "/home/" : defaultRoute.publishedRoutePath;

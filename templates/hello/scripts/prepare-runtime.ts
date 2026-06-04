@@ -1,6 +1,7 @@
 import { copyFileSync, cpSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 
 const outputDir = "public";
+
 rmSync(outputDir, { recursive: true, force: true });
 mkdirSync(`${outputDir}/runtime`, { recursive: true });
 
@@ -25,4 +26,4 @@ writeFileSync(
     .replace("{{LOADING_OVERLAY_BODY}}", loadingOverlayBody),
   "utf8",
 );
-copyFileSync("favicon.svg", `${outputDir}/favicon.svg`);
+copyFileSync("favicon.ico", `${outputDir}/favicon.ico`);
