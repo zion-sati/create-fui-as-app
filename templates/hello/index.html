@@ -2,6 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>FUI-AS Hello World</title>
     <style>
@@ -34,62 +35,13 @@
         outline: none;
       }
 
-      .effindom-loading-overlay {
-        position: absolute;
-        inset: 0;
-        display: grid;
-        place-items: center;
-        padding: 18px;
-        box-sizing: border-box;
-        background: color-mix(in srgb, Canvas 35%, transparent);
-        backdrop-filter: blur(10px);
-      }
-
-      .effindom-loading-overlay[hidden] {
-        display: none;
-      }
-
-      .effindom-loading-card {
-        max-width: 420px;
-        padding: 20px;
-        border-radius: 14px;
-        border: 1px solid color-mix(in srgb, CanvasText 20%, transparent);
-        background: color-mix(in srgb, Canvas 85%, transparent);
-        text-align: center;
-      }
-
-      .effindom-loading-kicker {
-        margin: 0 0 8px;
-        font-size: 11px;
-        letter-spacing: 0.1em;
-        text-transform: uppercase;
-      }
-
-      .effindom-loading-title {
-        margin: 0;
-      }
-
-      .effindom-loading-detail {
-        margin: 8px 0 0;
-        opacity: 0.85;
-      }
+      {{LOADING_OVERLAY_STYLES}}
     </style>
   </head>
   <body>
     <section class="app-shell" data-effindom-canvas-size-source>
       <canvas id="fui-canvas"></canvas>
-      <div
-        class="effindom-loading-overlay"
-        id="effindom-loading-overlay"
-        data-state="loading"
-        aria-live="polite"
-        aria-hidden="false">
-        <div class="effindom-loading-card">
-          <p class="effindom-loading-kicker">EffinDom backstage</p>
-          <h2 class="effindom-loading-title" id="effindom-loading-title">Teaching the pixels their lines...</h2>
-          <p class="effindom-loading-detail" id="effindom-loading-detail">The runtime orchestra is tuning up behind the canvas.</p>
-        </div>
-      </div>
+      {{LOADING_OVERLAY_BODY}}
     </section>
     <script src="./effindom-runtime-config.js"></script>
     <script src="./bridge.js"></script>

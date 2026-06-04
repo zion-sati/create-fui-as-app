@@ -1,34 +1,21 @@
 import { startRoutedHarness, type HarnessExports, type RoutedHarnessRoute } from './src/fui/FuiBrowser';
 import { appHostEvents } from './src/host/host-events';
 import { appHostServices } from './src/host/host-services';
+import { routeManifest } from './src/route-config';
+import { buildRoutedHarnessRoutes } from '@effindomv2/fui-as/browser/routed-app-conventions';
 
 type RouteExports = HarnessExports & {
   __runApp(): void;
   __disposeApp?(): void;
 };
 
-const routePrefix = window.location.pathname.startsWith('/v2/fui-as/demo-mvc/') ? '/v2/fui-as/demo-mvc' : '';
-const routes: readonly RoutedHarnessRoute[] = [
-  {
-    routePath: `${routePrefix}/home/`,
-    wasmPath: `${routePrefix}/home.wasm`,
-    title: 'Home',
-  },
-  {
-    routePath: `${routePrefix}/settings/`,
-    wasmPath: `${routePrefix}/settings.wasm`,
-    title: 'Settings',
-  },
-];
+const routedRoutes: readonly RoutedHarnessRoute[] = buildRoutedHarnessRoutes(routeManifest, window.location.pathname);
 
 startRoutedHarness<RouteExports>({
   shellId: 'fui-routes',
-  routeBase: routes[0].routePath,
-  routes,
+  routeBase: routedRoutes[0].routePath,
+  routes: routedRoutes,
   recreateRuntimeOnWarmRouteSwap: true,
-  showLoadingOverlay(isWarmRouteSwap): boolean {
-    return !isWarmRouteSwap;
-  },
   run(exports): void {
     exports.__runApp();
   },

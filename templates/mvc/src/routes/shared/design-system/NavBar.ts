@@ -1,6 +1,6 @@
 import { FlexBox, JustifyContent, Row, Unit } from "../../../fui/Fui";
 import { NavPill } from "./NavPill";
-import { homeRoute, settingsRoute } from "../routes";
+import { homeRoute, settingsRoute } from "../../../routes";
 
 function navSpacer(): FlexBox {
   return new FlexBox().width(10.0, Unit.Pixel).height(1.0, Unit.Pixel);

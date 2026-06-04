@@ -1,4 +1,4 @@
-import { copyFileSync, cpSync, existsSync, mkdirSync, rmSync, writeFileSync } from "node:fs";
+import { copyFileSync, cpSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 
 const outputDir = "public";
 rmSync(outputDir, { recursive: true, force: true });
@@ -15,4 +15,14 @@ writeFileSync(
   'window.__effindomRuntime = Object.assign({}, window.__effindomRuntime, { manifestUrl: "./runtime/dist/effindom.v2.manifest.json" });\n',
   "utf8",
 );
-copyFileSync("index.html", `${outputDir}/index.html`);
+const indexTemplate = readFileSync("index.html", "utf8");
+const loadingOverlayStyles = readFileSync("node_modules/@effindomv2/fui-as/browser/loading-overlay-styles.html", "utf8");
+const loadingOverlayBody = readFileSync("node_modules/@effindomv2/fui-as/browser/loading-overlay-body.html", "utf8");
+writeFileSync(
+  `${outputDir}/index.html`,
+  indexTemplate
+    .replace("{{LOADING_OVERLAY_STYLES}}", loadingOverlayStyles)
+    .replace("{{LOADING_OVERLAY_BODY}}", loadingOverlayBody),
+  "utf8",
+);
+copyFileSync("favicon.svg", `${outputDir}/favicon.svg`);
