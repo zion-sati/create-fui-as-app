@@ -52,6 +52,10 @@ test("createProject writes hello-world scaffold including AssemblyScript tsconfi
       readFileSync(join(target, "src", "host", "generated", "HostServices.ts"), "utf8").includes("appClockNowUnixSeconds"),
       true,
     );
+    assert.deepEqual(
+      readFileSync(join(target, "favicon.ico")),
+      readFileSync(join(process.cwd(), "templates", "hello", "favicon.ico")),
+    );
   } finally {
     rmSync(root, { recursive: true, force: true });
   }
@@ -107,6 +111,10 @@ test("createProject writes mvc scaffold when template is mvc", () => {
     assert.equal(routeShell.includes("FUI-AS Routed Demo"), false);
     assert.equal(routeShell.includes('class="app-shell"'), true);
     assert.equal(routeShell.includes('data-effindom-canvas-size-source'), true);
+    assert.deepEqual(
+      readFileSync(join(target, "favicon.ico")),
+      readFileSync(join(process.cwd(), "templates", "mvc", "favicon.ico")),
+    );
   } finally {
     rmSync(root, { recursive: true, force: true });
   }

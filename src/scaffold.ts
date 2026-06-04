@@ -1,6 +1,6 @@
 import { mkdirSync, readdirSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
-import { createTemplateFiles, type TemplateName } from "./templates.js";
+import { copyTemplateBinaryAssets, createTemplateFiles, type TemplateName } from "./templates.js";
 
 export interface ScaffoldOptions {
   readonly targetDirectory: string;
@@ -42,6 +42,8 @@ export function createProject(options: ScaffoldOptions): void {
     mkdirSync(dirname(absolutePath), { recursive: true });
     writeFileSync(absolutePath, contents, "utf8");
   }
+
+  copyTemplateBinaryAssets(options.template ?? "hello", options.targetDirectory);
 }
 
 interface ParsedCliOptions {

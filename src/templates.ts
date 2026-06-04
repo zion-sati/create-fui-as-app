@@ -1,4 +1,4 @@
-import { readdirSync, readFileSync, statSync } from "node:fs";
+import { copyFileSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { FUI_AS_VERSION, RUNTIME_VERSION } from "./versions.js";
@@ -11,6 +11,7 @@ export interface TemplateContext {
 }
 
 const TEMPLATE_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..", "..", "templates");
+const BINARY_TEMPLATE_FILES = new Set(["favicon.ico"]);
 const SHARED_LOADING_OVERLAY_STYLES = `.effindom-loading-overlay {
   position: absolute;
   inset: 0;
@@ -96,6 +97,9 @@ function collectTemplateFiles(root: string, relativePath = ""): Map<string, stri
       }
       continue;
     }
+    if (BINARY_TEMPLATE_FILES.has(nestedRelativePath)) {
+      continue;
+    }
     output.set(nestedRelativePath, readFileSync(nestedAbsolutePath, "utf8"));
   }
   return output;
@@ -124,4 +128,12 @@ export function createTemplateFiles(template: TemplateName, context: TemplateCon
     output.set(filePath, filePath.endsWith(".html") ? expandSharedLoadingOverlay(replaced) : replaced);
   }
   return output;
+}
+
+export function copyTemplateBinaryAssets(template: TemplateName, destinationDirectory: string): void {
+  for (const binaryFile of BINARY_TEMPLATE_FILES) {
+    const sourcePath = resolve(TEMPLATE_ROOT, template, binaryFile);
+    const destinationPath = resolve(destinationDirectory, binaryFile);
+    copyFileSync(sourcePath, destinationPath);
+  }
 }
