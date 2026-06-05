@@ -38,6 +38,28 @@ For example, to ship custom fonts alongside the bundled Noto set:
 2. Add `"fonts/*.ttf": "fonts"` to `stage-assets.json`.
 3. Reference them in app code as `/runtime/fonts/YourFont.ttf`.
 
+## Workers
+
+Workers are compiled as separate WASM modules and loaded on demand via `Worker.start(...)`. The worker manifest lives at `src/worker-config.ts`; add entries there for each worker entrypoint.
+
+### Adding a worker
+
+1. Create a worker module in `src/workers/` (use `advanced_workers.ts` as a reference).
+2. Register it in `src/worker-config.ts`.
+3. Add build scripts in `package.json` (copy the `build:wasm:workers:advanced` pattern).
+4. Define any host services the worker needs in `src/host/worker-host-services.ts`, then regenerate with `npm run generate:worker-host-services`.
+5. Ensure `worker-host-services.ts` at the project root registers the services under `globalThis.__fuiWorkerHostServicesModule`.
+
+The harness (`harness.ts`) already wires `workerHostServices` to `startRoutedHarness`. Workers are available from any route via:
+
+```ts
+const worker = Worker.start("advanced-workers")
+  .onProgress(this, (view, message) => { ... })
+  .onComplete(this, (view, result) => { ... })
+  .onError(this, (view, message) => { ... });
+worker.sendString("input-data");
+```
+
 ## Routing + deployment model
 
 Each route builds to its own wasm (`home.wasm`, `settings.wasm`) and is mounted by routed harness config. This is designed for true MFE slices: each route app can evolve and deploy independently while still sharing the same browser host/runtime contract.

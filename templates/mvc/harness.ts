@@ -24,4 +24,8 @@ startRoutedHarness<RouteExports>({
   },
   hostEvents: appHostEvents,
   hostServices: appHostServices,
+  workerHostServices: {
+    scriptUrl: new URL('./worker-host-services.js', import.meta.url).toString(),
+    exportName: 'appWorkerHostServices',
+  },
 });

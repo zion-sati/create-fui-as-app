@@ -100,6 +100,7 @@ writeFileSync(
   "utf8",
 );
 copyFileSync("favicon.ico", `${outputDir}/favicon.ico`);
+copyFileSync("worker-manifest.json", `${outputDir}/worker-manifest.json`);
 const defaultRoute = resolvedManifest.routes.length == 0 ? undefined : resolvedManifest.routes[0];
 const defaultRouteTitle = defaultRoute == null ? "FUI-AS Routed App" : defaultRoute.title;
 const defaultRouteHref = defaultRoute == null ? "/home/" : defaultRoute.publishedRoutePath;
