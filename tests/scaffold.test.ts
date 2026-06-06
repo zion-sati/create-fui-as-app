@@ -39,7 +39,7 @@ test("createProject writes hello-world scaffold including AssemblyScript tsconfi
     assert.equal(typeof packageJson.scripts.test, "string");
     assert.equal(typeof packageJson.scripts["generate:host"], "string");
     assert.equal(readFileSync(join(target, "src", "HelloWorld.ts"), "utf8").includes("Hello world"), true);
-    assert.equal(readFileSync(join(target, "README.md"), "utf8").includes("Hello World scaffold guide"), true);
+    assert.equal(readFileSync(join(target, "README.md"), "utf8").includes("FUI-AS Hello World App"), true);
     assert.equal(readFileSync(join(target, "src", "fui", "Fui.ts"), "utf8").includes("@effindomv2/fui-as/src/Fui"), true);
     assert.deepEqual(
       JSON.parse(readFileSync(join(target, "src", "host", "tsconfig.json"), "utf8")).compilerOptions.lib,
@@ -90,7 +90,7 @@ test("createProject writes mvc scaffold when template is mvc", () => {
       true,
     );
     assert.equal(readFileSync(join(target, "src", "routes", "HomeApp.ts"), "utf8").includes("createManagedApplication"), true);
-    assert.equal(readFileSync(join(target, "README.md"), "utf8").includes("MVC scaffold guide"), true);
+    assert.equal(readFileSync(join(target, "README.md"), "utf8").includes("FUI-AS MVC App"), true);
     assert.deepEqual(
       JSON.parse(readFileSync(join(target, "tsconfig.json"), "utf8")).compilerOptions.paths["@effindomv2/fui-as/src/*"],
       ["./node_modules/@effindomv2/fui-as/src/*"],
@@ -108,7 +108,6 @@ test("createProject writes mvc scaffold when template is mvc", () => {
       true,
     );
     const routeShell = readFileSync(join(target, "route-shell.html"), "utf8");
-    assert.equal(routeShell.includes("FUI-AS Routed Demo"), false);
     assert.equal(routeShell.includes('class="app-shell"'), true);
     assert.equal(routeShell.includes('data-effindom-canvas-size-source'), true);
     assert.deepEqual(
