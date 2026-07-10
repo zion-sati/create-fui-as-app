@@ -47,7 +47,7 @@ npx @effindomv2/fui-as-app my-mvc-app -- --template mvc
 |---|---|
 | **[create-fui-as-app](https://github.com/zion-sati/create-fui-as-app)** | This repo — CLI scaffolder |
 | **[fui-as](https://github.com/zion-sati/fui-as)** | AssemblyScript SDK + controls |
-| **[EffinDOM](https://github.com/zion-sati/EffinDOM)** | Monorepo — runtime, engine, docs |
+| **[EffinDOM](https://github.com/zion-sati/EffinDOM)** | Runtime, engine, docs |
 
 ---
 

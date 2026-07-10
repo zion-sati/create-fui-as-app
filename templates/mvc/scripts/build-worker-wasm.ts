@@ -1,6 +1,6 @@
 import { spawnSync } from "node:child_process";
 import { mkdirSync } from "node:fs";
-import { workerManifest } from "../src/worker-config";
+import { workerEntries } from "../src/worker-config";
 
 const args = process.argv.slice(2);
 let target = "release";
@@ -34,8 +34,8 @@ for (let index = 0; index < args.length; index += 1) {
 }
 
 const selectedWorkers = buildAll
-  ? workerManifest
-  : workerManifest.filter((worker): boolean => worker.key === workerKey);
+  ? workerEntries
+  : workerEntries.filter((worker): boolean => worker.key === workerKey);
 
 if (!buildAll && selectedWorkers.length === 0) {
   throw new Error(`Unknown worker key: ${workerKey}`);

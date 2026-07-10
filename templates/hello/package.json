@@ -5,9 +5,9 @@
   "type": "module",
   "description": "Scaffolded FUI-AS hello-world app",
   "scripts": {
-    "build": "npm run generate:host && npm run build:assets && npm run build:wasm && npm run build:harness",
-    "build:dev": "npm run generate:host && npm run build:assets && npm run build:wasm:dev && npm run build:harness",
-    "publish": "npm run generate:host && npm run build:assets && npm run build:wasm:publish && npm run build:harness && npm run publish:stage",
+    "build": "npm run generate:host && npm run build:assets -- --build-mode debug && npm run build:wasm && npm run build:harness",
+    "build:dev": "npm run generate:host && npm run build:assets -- --build-mode debug && npm run build:wasm:dev && npm run build:harness",
+    "publish": "npm run generate:host && npm run build:assets -- --build-mode release && npm run build:wasm:publish && npm run build:harness && npm run publish:stage",
     "build:assets": "tsx scripts/prepare-runtime.ts",
     "build:wasm": "asc src/App.ts --config asconfig.json --target release",
     "build:wasm:dev": "asc src/App.ts --config asconfig.json --target debug",
@@ -16,7 +16,7 @@
     "generate:host-services": "tsx ./node_modules/@effindomv2/fui-as/scripts/generate-host-services.ts src/host/host-services.ts appHostServices src/host/generated/HostServices.ts ../../fui/FuiPrimitives",
     "generate:host-events": "tsx ./node_modules/@effindomv2/fui-as/scripts/generate-host-events.ts src/host/host-events.ts appHostEvents src/host/generated/HostEvents.ts ../../fui/FuiPrimitives",
     "generate:host": "npm run generate:host-services && npm run generate:host-events",
-    "publish:stage": "rm -rf published && mkdir -p published && cp -R public/. published/ && cp -f index.html published/index.html",
+    "publish:stage": "tsx scripts/stage-publish.ts",
     "watch": "chokidar \"src/**/*.ts\" \"harness.ts\" \"index.html\" \"asconfig.json\" --ignore \"src/host/generated/**\" -c \"npm run build:dev\"",
     "serve": "serve public --listen 8080",
     "dev": "npm run build:dev && concurrently -k -n watch,serve \"npm run watch\" \"npm run serve\"",
@@ -30,8 +30,12 @@
     "assemblyscript": "0.28.17",
     "chokidar-cli": "^3.0.0",
     "concurrently": "^9.2.1",
-    "esbuild": "^0.27.7",
+    "esbuild": "0.28.1",
     "serve": "^14.2.5",
     "tsx": "^4.20.6"
+  },
+  "allowScripts": {
+    "esbuild@0.28.1": true,
+    "fsevents@2.3.3": true
   }
 }

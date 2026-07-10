@@ -1,4 +1,15 @@
-import { Column, Disposable, FlexBox, SelectionArea, Theme, activeTheme, bindTheme, disposeAll, Text, Unit } from "../../fui/Fui";
+import {
+  activeTheme,
+  bindTheme,
+  Column,
+  Disposable,
+  disposeAll,
+  FlexBox,
+  SelectionArea,
+  Text,
+  Theme,
+  Unit,
+} from "../../fui/Fui";
 import { createNavBar } from "../shared/design-system/NavBar";
 import { PrimaryButton } from "../shared/design-system/PrimaryButton";
 import { HomeModel } from "./HomeModel";
@@ -9,7 +20,7 @@ export class HomeView {
   private readonly hostServiceText: Text;
   private readonly hostEventText: Text;
   private readonly root!: SelectionArea;
-  private readonly themeBindings: Array<Disposable> = new Array<Disposable>();
+  private readonly themeBindings: Disposable[] = new Array<Disposable>();
   private themeBindingDisposed: bool = false;
 
   constructor(model: HomeModel) {

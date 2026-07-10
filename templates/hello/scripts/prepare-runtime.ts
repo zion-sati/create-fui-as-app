@@ -2,6 +2,22 @@ import { copyFileSync, cpSync, existsSync, mkdirSync, readFileSync, readdirSync,
 import { basename, join } from "node:path";
 
 const outputDir = "public";
+const buildMode = readBuildModeArg();
+
+function readBuildModeArg(): "debug" | "release" {
+  const index = process.argv.indexOf("--build-mode");
+  const value = index >= 0 ? process.argv[index + 1] : "debug";
+  if (value === "debug" || value === "release") return value;
+  throw new Error("--build-mode must be debug or release.");
+}
+
+function renderRuntimeConfig(): string {
+  const entries = [
+    '  manifestUrl: "./runtime/dist/effindom.v2.manifest.json",',
+    `  buildMode: ${JSON.stringify(buildMode)},`,
+  ];
+  return `window.__effindomRuntime = Object.assign({}, window.__effindomRuntime, {\n${entries.join("\n")}\n});\n`;
+}
 
 interface StageConfig {
   stage: Record<string, string>;
@@ -80,7 +96,7 @@ if (existsSync("node_modules/@effindomv2/runtime/dist/bridge.js.map")) {
 }
 writeFileSync(
   `${outputDir}/effindom-runtime-config.js`,
-  'window.__effindomRuntime = Object.assign({}, window.__effindomRuntime, { manifestUrl: "./runtime/dist/effindom.v2.manifest.json" });\n',
+  renderRuntimeConfig(),
   "utf8",
 );
 const indexTemplate = readFileSync("index.html", "utf8");

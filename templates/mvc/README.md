@@ -66,6 +66,10 @@ Each route builds to its own WASM module (`home.wasm`, `settings.wasm`).
 Routes can be deployed and updated independently — they share the same cached
 runtime but each route's app payload is just its own business logic.
 
+Debug builds default the DevTools DOM Mirror to on-requested. Release builds
+default it to disabled. Override `window.__effindomRuntime.devToolsDomMirror`
+before the bridge loads if you want different behavior.
+
 ---
 
 ## Shipping assets (fonts, images)
@@ -96,8 +100,7 @@ transforms) in the background without blocking the UI.
 1. Create a worker module in `src/workers/` — use `advanced_workers.ts` as a
    reference
 2. Register it in `src/worker-config.ts`
-3. Add build scripts in `package.json` (copy the `build:wasm:workers:advanced`
-   pattern)
+3. The existing `build:wasm:workers*` scripts will include the registered worker
 4. Define any host services the worker needs in
    `src/host/worker-host-services.ts`, then regenerate:
    ```bash
@@ -107,10 +110,10 @@ transforms) in the background without blocking the UI.
 Using a worker from any route:
 
 ```ts
-const worker = Worker.start("advanced-workers")
-  .onProgress(this, (view, message) => { ... })
-  .onComplete(this, (view, result) => { ... })
-  .onError(this, (view, message) => { ... });
+const worker = new Worker("./advanced-workers.wasm", "largestPrimeCalculatorWorker")
+  .onProgress(this, (view, event) => { ... })
+  .onComplete(this, (view, event) => { ... })
+  .onError(this, (view, event) => { ... });
 
-worker.sendString("input-data");
+worker.start("input-data");
 ```

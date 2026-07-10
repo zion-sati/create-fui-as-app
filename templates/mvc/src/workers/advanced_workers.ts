@@ -45,8 +45,7 @@ class LargestPrimeCalculatorJob extends WorkerJob {
   private candidate: i32 = 2;
   private largestPrime: i32 = 2;
 
-  protected onStart(): void {
-    this.receiveMessage();
+  protected onStart(_input: string): void {
     const now = appWorkerClockWallClockSinceEpochMs();
     this.startedAtMs = now;
     this.deadlineMs = now + PRIME_SEARCH_TOTAL_MS;

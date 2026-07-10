@@ -4,7 +4,7 @@ export interface WorkerEntry {
   readonly wasmFile: string;
 }
 
-export const workerManifest: readonly WorkerEntry[] = [
+export const workerEntries: readonly WorkerEntry[] = [
   {
     key: "advanced-workers",
     entrypoint: "src/workers/advanced_workers.ts",

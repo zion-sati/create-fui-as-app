@@ -15,7 +15,7 @@ export const appHostEvents = defineHostEvents({
         const timer = setInterval(() => {
           emit(nowUnixSeconds());
         }, 1000);
-        return () => clearInterval(timer);
+        return () => { clearInterval(timer); };
       },
     }),
   },

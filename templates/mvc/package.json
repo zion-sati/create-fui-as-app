@@ -5,9 +5,9 @@
   "type": "module",
   "description": "Scaffolded FUI-AS routed app",
   "scripts": {
-    "build": "npm run generate:host && npm run build:assets && npm run build:wasm && npm run build:wasm:workers && npm run build:harness && npm run build:worker-bootstrap && npm run build:worker-host-services",
-    "build:dev": "npm run generate:host && npm run build:assets && npm run build:wasm:dev && npm run build:wasm:workers:dev && npm run build:harness && npm run build:worker-bootstrap && npm run build:worker-host-services",
-    "publish": "npm run generate:host && npm run build:assets && npm run build:wasm:publish && npm run build:wasm:workers:publish && npm run build:harness && npm run build:worker-bootstrap && npm run build:worker-host-services && npm run publish:stage",
+    "build": "npm run generate:host && npm run build:assets -- --build-mode debug && npm run build:wasm && npm run build:wasm:workers && npm run build:harness && npm run build:worker-bootstrap && npm run build:worker-host-services",
+    "build:dev": "npm run generate:host && npm run build:assets -- --build-mode debug && npm run build:wasm:dev && npm run build:wasm:workers:dev && npm run build:harness && npm run build:worker-bootstrap && npm run build:worker-host-services",
+    "publish": "npm run generate:host && npm run build:assets -- --build-mode release && npm run build:wasm:publish && npm run build:wasm:workers:publish && npm run build:harness && npm run build:worker-bootstrap && npm run build:worker-host-services && npm run publish:stage",
     "build:assets": "tsx scripts/prepare-runtime.ts",
     "build:wasm": "npm run build:wasm:home && npm run build:wasm:settings",
     "build:wasm:home": "asc src/routes/HomeApp.ts --config asconfig.json --target release --outFile public/home.wasm",
@@ -20,7 +20,7 @@
     "build:wasm:publish:settings": "asc src/routes/SettingsApp.ts --config asconfig.json --target release --optimizeLevel 3 --shrinkLevel 2 --noAssert --outFile public/settings.wasm",
     "build:harness": "esbuild harness.ts --bundle --format=esm --platform=browser --outfile=public/harness.js",
     "build:worker-host-services": "esbuild worker-host-services.ts --bundle --format=esm --platform=browser --outfile=public/worker-host-services.js",
-    "build:worker-bootstrap": "esbuild node_modules/@effindomv2/fui-as/browser/src/worker-bootstrap.ts --bundle --format=esm --platform=browser --outfile=public/worker-bootstrap.js",
+    "build:worker-bootstrap": "esbuild @effindomv2/runtime/worker-bootstrap --bundle --format=esm --platform=browser --outfile=public/worker-bootstrap.js",
 
     "build:wasm:workers": "tsx scripts/build-worker-wasm.ts --all --target release",
     "build:wasm:workers:dev": "tsx scripts/build-worker-wasm.ts --all --target debug",
@@ -30,7 +30,7 @@
     "generate:host": "npm run generate:host-services && npm run generate:host-events",
     "generate:worker-host-services": "tsx ./node_modules/@effindomv2/fui-as/scripts/generate-host-services.ts src/host/worker-host-services.ts appWorkerHostServices src/host/generated/WorkerHostServices.ts ../../fui/FuiPrimitives fui_host_service",
     "generate:all": "npm run generate:host && npm run generate:worker-host-services",
-    "publish:stage": "rm -rf published && mkdir -p published && cp -R public/. published/ && cp -f index.html published/index.html && cp -f route-shell.html published/route-shell.html",
+    "publish:stage": "tsx scripts/stage-publish.ts",
     "watch": "chokidar \"src/**/*.ts\" \"harness.ts\" \"route-shell.html\" \"index.html\" \"asconfig.json\" --ignore \"src/host/generated/**\" -c \"npm run build:dev\"",
     "serve": "serve public --listen 8080",
     "dev": "npm run build:dev && concurrently -k -n watch,serve \"npm run watch\" \"npm run serve\"",
@@ -44,8 +44,12 @@
     "assemblyscript": "0.28.17",
     "chokidar-cli": "^3.0.0",
     "concurrently": "^9.2.1",
-    "esbuild": "^0.27.7",
+    "esbuild": "0.28.1",
     "serve": "^14.2.5",
     "tsx": "^4.20.6"
+  },
+  "allowScripts": {
+    "esbuild@0.28.1": true,
+    "fsevents@2.3.3": true
   }
 }

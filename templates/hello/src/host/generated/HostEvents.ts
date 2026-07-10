@@ -1,5 +1,5 @@
 // Generated from the scaffold host-events definition.
-import { Callback0, Callback1, Callback2 } from "../../fui/FuiPrimitives";
+import { Callback1 } from "../../fui/FuiPrimitives";
 
 let __appClockTickHandler: Callback1<i32> | null = null;
 

@@ -119,13 +119,20 @@ function expandSharedLoadingOverlay(value: string): string {
     .replaceAll("{{LOADING_OVERLAY_BODY}}", SHARED_LOADING_OVERLAY_BODY);
 }
 
+function outputPathForTemplate(filePath: string): string {
+  return filePath === "gitignore" ? ".gitignore" : filePath;
+}
+
 export function createTemplateFiles(template: TemplateName, context: TemplateContext): Map<string, string> {
   const templateDirectory = resolve(TEMPLATE_ROOT, template);
   const files = collectTemplateFiles(templateDirectory);
   const output = new Map<string, string>();
   for (const [filePath, contents] of files) {
     const replaced = replaceTemplateTokens(contents, context);
-    output.set(filePath, filePath.endsWith(".html") ? expandSharedLoadingOverlay(replaced) : replaced);
+    output.set(
+      outputPathForTemplate(filePath),
+      filePath.endsWith(".html") ? expandSharedLoadingOverlay(replaced) : replaced,
+    );
   }
   return output;
 }

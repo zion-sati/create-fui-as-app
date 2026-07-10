@@ -1,11 +1,11 @@
-import { Disposable, Theme, activeTheme, bindTheme, disposeAll, NavLink, Text } from "../../../fui/Fui";
+import { activeTheme, bindTheme, Disposable, disposeAll, NavLink, Text, Theme } from "../../../fui/Fui";
 
 const PILL_RADIUS: f32 = 999.0;
 const PILL_PADDING_X: f32 = 16.0;
 const PILL_PADDING_Y: f32 = 8.0;
 export class NavPill extends NavLink {
   private readonly labelNode: Text;
-  private readonly themeBindings: Array<Disposable> = new Array<Disposable>();
+  private readonly themeBindings: Disposable[] = new Array<Disposable>();
   private themeBindingDisposed: bool = false;
   private activeValue: bool = false;
 

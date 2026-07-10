@@ -1,6 +1,7 @@
-`@effindomv2/create-fui-as-app` is licensed under the MIT License.
+# EffinDom create-fui-as-app License
+
+This repository is licensed under the MIT License.
 
 See:
 
-- `../../LICENSE.md`
-- `../../LICENSES/MIT.md`
+- `LICENSES/MIT.md`

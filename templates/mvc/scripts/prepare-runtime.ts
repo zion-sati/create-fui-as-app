@@ -4,11 +4,27 @@ import { renderRoutedPageHead, resolveRouteManifest, routeHead } from "@effindom
 import { routeManifest } from "../src/route-config";
 
 const outputDir = "public";
+const buildMode = readBuildModeArg();
 const resolvedManifest = resolveRouteManifest(routeManifest);
 const indexTemplate = readFileSync("index.html", "utf8");
 const routeShellTemplate = readFileSync("route-shell.html", "utf8");
 const loadingOverlayStyles = readFileSync("node_modules/@effindomv2/fui-as/browser/loading-overlay-styles.html", "utf8");
 const loadingOverlayBody = readFileSync("node_modules/@effindomv2/fui-as/browser/loading-overlay-body.html", "utf8");
+
+function readBuildModeArg(): "debug" | "release" {
+  const index = process.argv.indexOf("--build-mode");
+  const value = index >= 0 ? process.argv[index + 1] : "debug";
+  if (value === "debug" || value === "release") return value;
+  throw new Error("--build-mode must be debug or release.");
+}
+
+function renderRuntimeConfig(): string {
+  const entries = [
+    '  manifestUrl: "./runtime/dist/effindom.v2.manifest.json",',
+    `  buildMode: ${JSON.stringify(buildMode)},`,
+  ];
+  return `window.__effindomRuntime = Object.assign({}, window.__effindomRuntime, {\n${entries.join("\n")}\n});\n`;
+}
 
 interface StageConfig {
   stage: Record<string, string>;
@@ -96,11 +112,10 @@ if (existsSync("node_modules/@effindomv2/runtime/dist/bridge.js.map")) {
 }
 writeFileSync(
   `${outputDir}/effindom-runtime-config.js`,
-  'window.__effindomRuntime = Object.assign({}, window.__effindomRuntime, { manifestUrl: "./runtime/dist/effindom.v2.manifest.json" });\n',
+  renderRuntimeConfig(),
   "utf8",
 );
 copyFileSync("favicon.ico", `${outputDir}/favicon.ico`);
-copyFileSync("worker-manifest.json", `${outputDir}/worker-manifest.json`);
 const defaultRoute = resolvedManifest.routes.length == 0 ? undefined : resolvedManifest.routes[0];
 const defaultRouteTitle = defaultRoute == null ? "FUI-AS Routed App" : defaultRoute.title;
 const defaultRouteHref = defaultRoute == null ? "/home/" : defaultRoute.publishedRoutePath;

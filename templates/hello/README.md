@@ -51,6 +51,10 @@ npm run dev        # dev server with watch + fast debug recompile
 npm run publish    # optimised release build → published/
 ```
 
+Debug builds default the DevTools DOM Mirror to on-requested. Release builds
+default it to disabled. Override `window.__effindomRuntime.devToolsDomMirror`
+before the bridge loads if you want different behavior.
+
 ---
 
 ## Shipping assets (fonts, images)

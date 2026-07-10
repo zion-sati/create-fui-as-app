@@ -1,7 +1,8 @@
-import { Application } from "./fui/Fui";
+import { createManagedApplication } from "./fui/Fui";
+import { HelloWorld } from "./HelloWorld";
+
 export * from "./fui/FuiExports";
 export * from "./host/generated/HostEvents";
 
-import { createHelloWorldPage } from "./HelloWorld";
-
-Application.register((app) => app.themeSystem().page(createHelloWorldPage));
+const app = createManagedApplication<HelloWorld>(() => new HelloWorld());
+app.useSystemTheme();

@@ -1,6 +1,6 @@
 {
   "name": "@effindomv2/create-fui-as-app",
-  "version": "0.1.45",
+  "version": "0.1.49",
   "private": false,
   "license": "MIT",
   "description": "Scaffold a minimal EffinDom v2 FUI-AS app",
@@ -28,15 +28,25 @@
   ],
   "scripts": {
     "build": "tsc -p tsconfig.json",
+    "lint": "bash -lc 'if [ -x node_modules/.bin/eslint ]; then node --experimental-strip-types ./node_modules/eslint/bin/eslint.js --config eslint.config.ts --max-warnings=0 \"src/**/*.ts\" \"tests/**/*.ts\"; elif [ -x ../../node_modules/.bin/eslint ]; then node --experimental-strip-types ../../node_modules/eslint/bin/eslint.js --config eslint.config.ts --max-warnings=0 \"src/**/*.ts\" \"tests/**/*.ts\"; else echo \"Could not locate eslint in node_modules/.bin.\" >&2; exit 1; fi'",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "npm run build && node --test dist/tests/**/*.test.js",
     "publish:local": "bash -c 'if [ -f scripts/publish/local/create-fui-as-app.sh ]; then bash scripts/publish/local/create-fui-as-app.sh; elif [ -f ../../scripts/publish/local/create-fui-as-app.sh ]; then bash ../../scripts/publish/local/create-fui-as-app.sh; else echo \"Missing create-fui-as-app publish:local script\" >&2; exit 1; fi'",
     "publish:npm": "bash -c 'if [ -f scripts/publish/npm/create-fui-as-app.sh ]; then bash scripts/publish/npm/create-fui-as-app.sh; elif [ -f ../../scripts/publish/npm/create-fui-as-app.sh ]; then bash ../../scripts/publish/npm/create-fui-as-app.sh; else echo \"Missing create-fui-as-app publish:npm script\" >&2; exit 1; fi'",
-    "prepack": "npm run build"
+    "prepack": "npm run build",
+    "prepublishOnly": "npm run lint && npm run typecheck"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@types/node": "^24.10.1",
+    "eslint": "^10.3.0",
+    "jiti": "^2.7.0",
     "tsx": "^4.20.6",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.59.2"
+  },
+  "allowScripts": {
+    "esbuild@0.28.1": true,
+    "fsevents@2.3.3": true
   }
 }
