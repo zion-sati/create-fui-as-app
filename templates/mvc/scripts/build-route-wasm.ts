@@ -62,6 +62,12 @@ for (const route of selectedRoutes) {
 
   console.log(`Building ${route.title} -> ${route.wasmFile}`);
   const result = spawnSync("asc", ascArgs, { stdio: "inherit" });
+  if (result.error !== undefined) {
+    throw result.error;
+  }
+  if (result.signal !== null) {
+    throw new Error(`AssemblyScript compiler terminated by ${result.signal} while building ${route.key}.`);
+  }
   if (result.status !== 0) {
     process.exit(result.status ?? 1);
   }

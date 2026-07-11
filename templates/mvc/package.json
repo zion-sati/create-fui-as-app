@@ -20,7 +20,7 @@
     "build:wasm:publish:settings": "asc src/routes/SettingsApp.ts --config asconfig.json --target release --optimizeLevel 3 --shrinkLevel 2 --noAssert --outFile public/settings.wasm",
     "build:harness": "esbuild harness.ts --bundle --format=esm --platform=browser --outfile=public/harness.js",
     "build:worker-host-services": "esbuild worker-host-services.ts --bundle --format=esm --platform=browser --outfile=public/worker-host-services.js",
-    "build:worker-bootstrap": "esbuild @effindomv2/runtime/worker-bootstrap --bundle --format=esm --platform=browser --outfile=public/worker-bootstrap.js",
+    "build:worker-bootstrap": "esbuild @effindomv2/runtime/worker-bootstrap --bundle --format=iife --platform=browser --outfile=public/worker-bootstrap.js",
 
     "build:wasm:workers": "tsx scripts/build-worker-wasm.ts --all --target release",
     "build:wasm:workers:dev": "tsx scripts/build-worker-wasm.ts --all --target debug",
@@ -41,9 +41,9 @@
     "@effindomv2/runtime": "__RUNTIME_VERSION__"
   },
   "devDependencies": {
-    "assemblyscript": "0.28.17",
+    "assemblyscript": "0.28.19",
     "chokidar-cli": "^3.0.0",
-    "concurrently": "^9.2.1",
+    "concurrently": "^10.0.3",
     "esbuild": "0.28.1",
     "serve": "^14.2.5",
     "tsx": "^4.20.6"

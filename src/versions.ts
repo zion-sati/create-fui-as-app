@@ -1,2 +1,2 @@
-export const FUI_AS_VERSION = "0.1.42";
-export const RUNTIME_VERSION = "0.1.22";
+export const FUI_AS_VERSION = "0.1.43";
+export const RUNTIME_VERSION = "0.1.23";

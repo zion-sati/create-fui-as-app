@@ -9,9 +9,11 @@ export const appHostServices = defineHostServices({
   // fetch a scalar value on demand from the browser host.
   appClock: {
     nowUnixSeconds: hostService({
-      args: [],
+      args: [] as const,
       returns: "i32",
-      implementation: (): number => nowUnixSeconds(),
+      implementation(): number {
+        return nowUnixSeconds();
+      },
     }),
   },
 });

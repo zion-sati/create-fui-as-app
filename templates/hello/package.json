@@ -27,9 +27,9 @@
     "@effindomv2/runtime": "__RUNTIME_VERSION__"
   },
   "devDependencies": {
-    "assemblyscript": "0.28.17",
+    "assemblyscript": "0.28.19",
     "chokidar-cli": "^3.0.0",
-    "concurrently": "^9.2.1",
+    "concurrently": "^10.0.3",
     "esbuild": "0.28.1",
     "serve": "^14.2.5",
     "tsx": "^4.20.6"

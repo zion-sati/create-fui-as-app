@@ -10,9 +10,11 @@ export const appHostServices = defineHostServices({
   // appClock.nowUnixSeconds() -> appClockNowUnixSeconds().
   appClock: {
     nowUnixSeconds: hostService({
-      args: [],
+      args: [] as const,
       returns: "i32",
-      implementation: (): number => nowUnixSeconds(),
+      implementation(): number {
+        return nowUnixSeconds();
+      },
     }),
   },
 });
