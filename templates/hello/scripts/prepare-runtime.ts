@@ -12,8 +12,17 @@ function readBuildModeArg(): "debug" | "release" {
 }
 
 function renderRuntimeConfig(): string {
+  const manifest = JSON.parse(readFileSync("node_modules/@effindomv2/runtime/dist/effindom.v2.manifest.json", "utf8")) as {
+    runtime_set_hash?: string;
+  };
+  if (typeof manifest.runtime_set_hash !== "string" || manifest.runtime_set_hash.length === 0) {
+    throw new Error("Installed EffinDOM runtime does not declare runtime_set_hash.");
+  }
+  const cdnManifestUrl = `https://runtime.effindom.dev/v2/manifests/${manifest.runtime_set_hash}.json`;
   const entries = [
     '  manifestUrl: "./runtime/dist/effindom.v2.manifest.json",',
+    `  manifestUrls: ${JSON.stringify([cdnManifestUrl, "./runtime/dist/effindom.v2.manifest.json"])},`,
+    `  expectedRuntimeSetHash: ${JSON.stringify(manifest.runtime_set_hash)},`,
     `  buildMode: ${JSON.stringify(buildMode)},`,
   ];
   return `window.__effindomRuntime = Object.assign({}, window.__effindomRuntime, {\n${entries.join("\n")}\n});\n`;
