@@ -18,7 +18,7 @@ function renderRuntimeConfig(): string {
   if (typeof manifest.runtime_set_hash !== "string" || manifest.runtime_set_hash.length === 0) {
     throw new Error("Installed EffinDOM runtime does not declare runtime_set_hash.");
   }
-  const cdnManifestUrl = `https://runtime.effindom.dev/v2/manifests/${manifest.runtime_set_hash}.json`;
+  const cdnManifestUrl = `https://runtimes.effindom.dev/v2/manifests/${manifest.runtime_set_hash}.json`;
   const entries = [
     '  manifestUrl: "./runtime/dist/effindom.v2.manifest.json",',
     `  manifestUrls: ${JSON.stringify([cdnManifestUrl, "./runtime/dist/effindom.v2.manifest.json"])},`,
