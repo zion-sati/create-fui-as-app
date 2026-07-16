@@ -1,23 +1,19 @@
-import { activeTheme, bindTheme, Disposable, disposeAll, NavLink, Text, Theme } from "../../../fui/Fui";
+import { activeTheme, bindTheme, Disposable, disposeAll, NavLink, Theme } from "../../../fui/Fui";
 
 const PILL_RADIUS: f32 = 999.0;
 const PILL_PADDING_X: f32 = 16.0;
 const PILL_PADDING_Y: f32 = 8.0;
 export class NavPill extends NavLink {
-  private readonly labelNode: Text;
   private readonly themeBindings: Disposable[] = new Array<Disposable>();
   private themeBindingDisposed: bool = false;
   private activeValue: bool = false;
 
   constructor(href: string, label: string) {
     super(href, label, false);
-    this.labelNode = new Text(label)
-      .fontSize(14.0)
-      .selectable(false) as Text;
+    this.labelNode.fontSize(14.0);
     this
       .cornerRadius(PILL_RADIUS)
-      .padding(PILL_PADDING_X, PILL_PADDING_Y, PILL_PADDING_X, PILL_PADDING_Y)
-      .child(this.labelNode);
+      .padding(PILL_PADDING_X, PILL_PADDING_Y, PILL_PADDING_X, PILL_PADDING_Y);
     this.trackTheme(bindTheme(this, (pill, theme): void => {
       pill.applyVisualState(theme);
     }));
@@ -38,11 +34,11 @@ export class NavPill extends NavLink {
   private applyVisualState(theme: Theme): void {
     if (this.activeValue) {
       this.bgColor(theme.colors.accent);
-      this.labelNode.textColor(theme.colors.textPrimary);
+      this.textColor(theme.colors.textPrimary);
       return;
     }
     this.bgColor(theme.colors.surface);
-    this.labelNode.textColor(theme.colors.textMuted);
+    this.textColor(theme.colors.textMuted);
   }
 
   private trackTheme(disposable: Disposable): void {
