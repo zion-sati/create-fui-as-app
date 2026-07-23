@@ -1,5 +1,9 @@
 # EffinDom create-fui-as-app
 
+[![create-fui-as-app CI](https://github.com/zion-sati/create-fui-as-app/actions/workflows/create-fui-as-app-ci.yml/badge.svg)](https://github.com/zion-sati/create-fui-as-app/actions/workflows/create-fui-as-app-ci.yml)
+[![npm](https://img.shields.io/npm/v/@effindomv2/create-fui-as-app?label=create-fui-as-app)](https://www.npmjs.com/package/@effindomv2/create-fui-as-app)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE.md)
+
 > **`npx` scaffolder for FUI-AS apps. One command to a running EffinDom
 > application.**
 
@@ -24,7 +28,7 @@ npm run dev
 For the MVC starter with routing:
 
 ```bash
-npx @effindomv2/fui-as-app my-mvc-app -- --template mvc
+npx @effindomv2/create-fui-as-app my-mvc-app -- --template mvc
 ```
 
 ---

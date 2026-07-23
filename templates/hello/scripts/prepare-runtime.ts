@@ -108,8 +108,8 @@ writeFileSync(
   "utf8",
 );
 const indexTemplate = readFileSync("index.html", "utf8");
-const loadingOverlayStyles = readFileSync("node_modules/@effindomv2/fui-as/browser/loading-overlay-styles.html", "utf8");
-const loadingOverlayBody = readFileSync("node_modules/@effindomv2/fui-as/browser/loading-overlay-body.html", "utf8");
+const loadingOverlayStyles = readFileSync("loading-overlay-styles.html", "utf8");
+const loadingOverlayBody = readFileSync("loading-overlay-body.html", "utf8");
 writeFileSync(
   `${outputDir}/index.html`,
   indexTemplate

@@ -8,8 +8,8 @@ const buildMode = readBuildModeArg();
 const resolvedManifest = resolveRouteManifest(routeManifest);
 const indexTemplate = readFileSync("index.html", "utf8");
 const routeShellTemplate = readFileSync("route-shell.html", "utf8");
-const loadingOverlayStyles = readFileSync("node_modules/@effindomv2/fui-as/browser/loading-overlay-styles.html", "utf8");
-const loadingOverlayBody = readFileSync("node_modules/@effindomv2/fui-as/browser/loading-overlay-body.html", "utf8");
+const loadingOverlayStyles = readFileSync("loading-overlay-styles.html", "utf8");
+const loadingOverlayBody = readFileSync("loading-overlay-body.html", "utf8");
 
 function readBuildModeArg(): "debug" | "release" {
   const index = process.argv.indexOf("--build-mode");

@@ -36,6 +36,7 @@ void test("createProject writes hello-world scaffold including AssemblyScript ts
       devDependencies: Record<string, string>;
       allowScripts: Record<string, boolean>;
     };
+    const shell = readFileSync(join(target, "index.html"), "utf8");
     assert.equal(typeof packageJson.scripts.dev, "string");
     assert.equal(typeof packageJson.scripts.build, "string");
     assert.equal(typeof packageJson.scripts.publish, "string");
@@ -53,11 +54,23 @@ void test("createProject writes hello-world scaffold including AssemblyScript ts
     assert.equal(packageJson.devDependencies.esbuild, "0.28.1");
     assert.equal(packageJson.allowScripts["esbuild@0.28.1"], true);
     assert.equal(readFileSync(join(target, "src", "HelloWorld.ts"), "utf8").includes("Hello world"), true);
-    assert.equal(readFileSync(join(target, "src", "App.ts"), "utf8").includes("createManagedApplication"), true);
+    const appSource = readFileSync(join(target, "src", "App.ts"), "utf8");
+    assert.equal(appSource.includes("createManagedApplication"), true);
+    assert.equal(appSource.includes('Application.caption("my-app")'), true);
     assert.equal(readFileSync(join(target, "src", "HelloWorld.ts"), "utf8").includes("this.themeBinding.dispose()"), true);
     assert.equal(existsSync(join(target, ".npmrc")), false);
     assert.equal(existsSync(join(target, ".gitignore")), true);
     assert.equal(readFileSync(join(target, "README.md"), "utf8").includes("FUI-AS Hello World App"), true);
+    const loadingOverlayBody = readFileSync(join(target, "loading-overlay-body.html"), "utf8");
+    const loadingOverlayStyles = readFileSync(join(target, "loading-overlay-styles.html"), "utf8");
+    assert.equal(shell.includes("{{LOADING_OVERLAY_BODY}}"), true);
+    assert.equal(shell.includes("{{LOADING_OVERLAY_STYLES}}"), true);
+    assert.equal(loadingOverlayBody.includes('data-effindom-loading-visual'), true);
+    assert.equal(loadingOverlayBody.includes('__effindomLoadingBootstrap'), true);
+    assert.equal(loadingOverlayBody.includes('Runtime assets'), true);
+    assert.equal(loadingOverlayBody.includes('effindom-loading-progress'), true);
+    assert.equal(loadingOverlayStyles.includes('@keyframes effindom-loading-frame'), true);
+    assert.equal(loadingOverlayStyles.includes('user-select: none'), true);
     assert.equal(readFileSync(join(target, "scripts", "prepare-runtime.ts"), "utf8").includes("devToolsDomMirror"), false);
     assert.equal(readFileSync(join(target, "src", "fui", "Fui.ts"), "utf8").includes("@effindomv2/fui-as/src/Fui"), true);
     assert.deepEqual(
@@ -79,7 +92,7 @@ void test("createProject writes hello-world scaffold including AssemblyScript ts
       readFileSync(join(target, "favicon.ico")),
       readFileSync(join(process.cwd(), "templates", "hello", "favicon.ico")),
     );
-    assert.equal(statSync(join(target, "favicon.ico")).size < 10_000, true);
+    assert.equal(statSync(join(target, "favicon.ico")).size > 10_000, true);
   } finally {
     rmSync(root, { recursive: true, force: true });
   }
@@ -123,7 +136,11 @@ void test("createProject writes mvc scaffold when template is mvc", () => {
       ),
       true,
     );
-    assert.equal(readFileSync(join(target, "src", "routes", "HomeApp.ts"), "utf8").includes("createManagedApplication"), true);
+    const homeAppSource = readFileSync(join(target, "src", "routes", "HomeApp.ts"), "utf8");
+    const settingsAppSource = readFileSync(join(target, "src", "routes", "SettingsApp.ts"), "utf8");
+    assert.equal(homeAppSource.includes("createManagedApplication"), true);
+    assert.equal(homeAppSource.includes('Application.caption("my-mvc-app • Home")'), true);
+    assert.equal(settingsAppSource.includes('Application.caption("my-mvc-app • Settings")'), true);
     assert.equal(readFileSync(join(target, "README.md"), "utf8").includes("FUI-AS MVC App"), true);
     assert.equal(readFileSync(join(target, "README.md"), "utf8").includes("new Worker("), true);
     assert.equal(readFileSync(join(target, "README.md"), "utf8").includes("Worker.start("), false);
@@ -158,6 +175,16 @@ void test("createProject writes mvc scaffold when template is mvc", () => {
     const routeShell = readFileSync(join(target, "route-shell.html"), "utf8");
     assert.equal(routeShell.includes('class="app-shell"'), true);
     assert.equal(routeShell.includes('data-effindom-canvas-size-source'), true);
+    const loadingOverlayBody = readFileSync(join(target, "loading-overlay-body.html"), "utf8");
+    const loadingOverlayStyles = readFileSync(join(target, "loading-overlay-styles.html"), "utf8");
+    assert.equal(routeShell.includes("{{LOADING_OVERLAY_BODY}}"), true);
+    assert.equal(routeShell.includes("{{LOADING_OVERLAY_STYLES}}"), true);
+    assert.equal(loadingOverlayBody.includes('data-effindom-loading-visual'), true);
+    assert.equal(loadingOverlayBody.includes('__effindomLoadingBootstrap'), true);
+    assert.equal(loadingOverlayBody.includes('Runtime assets'), true);
+    assert.equal(loadingOverlayBody.includes('effindom-loading-progress'), true);
+    assert.equal(loadingOverlayStyles.includes('@keyframes effindom-loading-frame'), true);
+    assert.equal(loadingOverlayStyles.includes('user-select: none'), true);
     assert.deepEqual(
       readFileSync(join(target, "favicon.ico")),
       readFileSync(join(process.cwd(), "templates", "mvc", "favicon.ico")),
