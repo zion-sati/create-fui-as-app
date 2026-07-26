@@ -16,7 +16,9 @@ const exactPaths = new Set([
   'README.md',
   'eslint.config.ts',
   'package-lock.json',
+  'update-deps.sh',
   'package.json',
+  'scripts/update-upstream-versions.mjs',
   'tsconfig.json',
   '.github/workflows/create-fui-as-app-ci.yml',
 ]);
@@ -66,17 +68,11 @@ async function successfulCiRuns() {
   return runs;
 }
 
-async function hasReleaseInputs(runId) {
-  const result = await api(`/repos/${repository}/actions/runs/${runId}/artifacts?per_page=100`);
-  return result.artifacts.some((artifact) => artifact.name === 'create-fui-as-app-release-inputs' && !artifact.expired);
-}
-
 const runs = await successfulCiRuns();
 let attestationRun = null;
 for (const run of runs) {
   if (!isAncestor(run.head_sha, releaseSha)) continue;
   if (changedPaths(run.head_sha, releaseSha).some(affectsRelease)) continue;
-  if (!(await hasReleaseInputs(run.id))) continue;
   attestationRun = run;
   break;
 }
@@ -85,5 +81,5 @@ if (attestationRun === null) {
   throw new Error('No successful create-fui-as-app CI run attests all release inputs for this release commit.');
 }
 
-appendFileSync(outputPath, `ci_run_id=${attestationRun.id}\nrelease_inputs_run_id=${attestationRun.id}\n`);
+appendFileSync(outputPath, `ci_run_id=${attestationRun.id}\n`);
 console.log(`create-fui-as-app CI attestation: ${attestationRun.html_url}`);

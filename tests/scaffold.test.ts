@@ -38,6 +38,8 @@ void test("createProject writes hello-world scaffold including AssemblyScript ts
     };
     const shell = readFileSync(join(target, "index.html"), "utf8");
     assert.equal(typeof packageJson.scripts.dev, "string");
+    assert.equal(packageJson.scripts.serve, "sirv public --dev --host 0.0.0.0 --port 8080");
+    assert.equal(packageJson.devDependencies["sirv-cli"], "3.0.1");
     assert.equal(typeof packageJson.scripts.build, "string");
     assert.equal(typeof packageJson.scripts.publish, "string");
     assert.equal(packageJson.scripts.build.includes("--build-mode debug"), true);
@@ -114,6 +116,8 @@ void test("createProject writes mvc scaffold when template is mvc", () => {
       allowScripts: Record<string, boolean>;
     };
     assert.equal(typeof packageJson.scripts["build:wasm:home"], "string");
+    assert.equal(packageJson.scripts.serve, "sirv public --dev --host 0.0.0.0 --port 8080");
+    assert.equal(packageJson.devDependencies["sirv-cli"], "3.0.1");
     assert.equal(typeof packageJson.scripts["build:wasm:settings"], "string");
     assert.equal(typeof packageJson.scripts.publish, "string");
     assert.equal(packageJson.scripts.build.includes("--build-mode debug"), true);
