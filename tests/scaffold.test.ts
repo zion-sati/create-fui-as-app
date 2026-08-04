@@ -37,6 +37,7 @@ void test("createProject writes hello-world scaffold including AssemblyScript ts
       allowScripts: Record<string, boolean>;
     };
     const shell = readFileSync(join(target, "index.html"), "utf8");
+    assert.equal((readJson(join(target, "fui-config.json")) as { version: number }).version, 1);
     assert.equal(typeof packageJson.scripts.dev, "string");
     assert.equal(packageJson.scripts.serve, "sirv public --dev --host 0.0.0.0 --port 8080");
     assert.equal(packageJson.devDependencies["sirv-cli"], "3.0.1");
@@ -73,7 +74,7 @@ void test("createProject writes hello-world scaffold including AssemblyScript ts
     assert.equal(loadingOverlayBody.includes('effindom-loading-progress'), true);
     assert.equal(loadingOverlayStyles.includes('@keyframes effindom-loading-frame'), true);
     assert.equal(loadingOverlayStyles.includes('user-select: none'), true);
-    assert.equal(readFileSync(join(target, "scripts", "prepare-runtime.ts"), "utf8").includes("devToolsDomMirror"), false);
+    assert.equal(readFileSync(join(target, "scripts", "prepare-runtime.ts"), "utf8").includes("parseFuiConfig"), true);
     assert.equal(readFileSync(join(target, "src", "fui", "Fui.ts"), "utf8").includes("@effindomv2/fui-as/src/Fui"), true);
     assert.deepEqual(
       (readJson(join(target, "src", "host", "tsconfig.json")) as { compilerOptions: { lib: string[] } }).compilerOptions.lib,
@@ -115,6 +116,7 @@ void test("createProject writes mvc scaffold when template is mvc", () => {
       devDependencies: Record<string, string>;
       allowScripts: Record<string, boolean>;
     };
+    assert.equal((readJson(join(target, "fui-config.json")) as { version: number }).version, 1);
     assert.equal(typeof packageJson.scripts["build:wasm:home"], "string");
     assert.equal(packageJson.scripts.serve, "sirv public --dev --host 0.0.0.0 --port 8080");
     assert.equal(packageJson.devDependencies["sirv-cli"], "3.0.1");
@@ -151,7 +153,7 @@ void test("createProject writes mvc scaffold when template is mvc", () => {
     assert.equal(existsSync(join(target, "worker-manifest.json")), false);
     assert.equal(existsSync(join(target, ".npmrc")), false);
     assert.equal(existsSync(join(target, ".gitignore")), true);
-    assert.equal(readFileSync(join(target, "scripts", "prepare-runtime.ts"), "utf8").includes("devToolsDomMirror"), false);
+    assert.equal(readFileSync(join(target, "scripts", "prepare-runtime.ts"), "utf8").includes("parseFuiConfig"), true);
     assert.deepEqual(
       (readJson(join(target, "tsconfig.json")) as { compilerOptions: { paths: Record<string, string[]> } }).compilerOptions.paths["@effindomv2/fui-as/src/*"],
       ["./node_modules/@effindomv2/fui-as/src/*"],

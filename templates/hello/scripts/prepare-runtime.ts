@@ -1,8 +1,10 @@
 import { copyFileSync, cpSync, existsSync, mkdirSync, readFileSync, readdirSync, rmSync, statSync, writeFileSync } from "node:fs";
 import { basename, join } from "node:path";
+import { createFuiConfigBootstrapScript, parseFuiConfig } from "@effindomv2/runtime/fui-config";
 
 const outputDir = "public";
 const buildMode = readBuildModeArg();
+const fuiConfig = parseFuiConfig(JSON.parse(readFileSync("fui-config.json", "utf8")) as unknown);
 
 function readBuildModeArg(): "debug" | "release" {
   const index = process.argv.indexOf("--build-mode");
@@ -24,7 +26,10 @@ function renderRuntimeConfig(): string {
     `  expectedRuntimeSetHash: ${JSON.stringify(manifest.runtime_set_hash)},`,
     `  buildMode: ${JSON.stringify(buildMode)},`,
   ];
-  return `window.__effindomRuntime = Object.assign({}, window.__effindomRuntime, {\n${entries.join("\n")}\n});\n`;
+  if (fuiConfig.web?.devTools?.domMirror !== undefined) {
+    entries.push(`  devToolsDomMirror: ${JSON.stringify(fuiConfig.web.devTools.domMirror)},`);
+  }
+  return `${createFuiConfigBootstrapScript(fuiConfig)}window.__effindomRuntime = Object.assign({}, window.__effindomRuntime, {\n${entries.join("\n")}\n});\n`;
 }
 
 interface StageConfig {
@@ -110,11 +115,15 @@ writeFileSync(
 const indexTemplate = readFileSync("index.html", "utf8");
 const loadingOverlayStyles = readFileSync("loading-overlay-styles.html", "utf8");
 const loadingOverlayBody = readFileSync("loading-overlay-body.html", "utf8");
+const resolvedLoadingOverlayBody = loadingOverlayBody.replace(
+  "__FUI_LOADING_DELAY_MS__",
+  String(fuiConfig.web?.loading?.delayMs ?? 300),
+);
 writeFileSync(
   `${outputDir}/index.html`,
   indexTemplate
     .replace("{{LOADING_OVERLAY_STYLES}}", loadingOverlayStyles)
-    .replace("{{LOADING_OVERLAY_BODY}}", loadingOverlayBody),
+    .replace("{{LOADING_OVERLAY_BODY}}", resolvedLoadingOverlayBody),
   "utf8",
 );
 copyFileSync("favicon.ico", `${outputDir}/favicon.ico`);
