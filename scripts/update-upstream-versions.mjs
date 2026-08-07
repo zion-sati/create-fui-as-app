@@ -9,8 +9,9 @@ const npm = process.platform === 'win32' ? 'npm.cmd' : 'npm';
 const versionPattern = /^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/;
 const npmView = (...arguments_) => execFileSync(npm, ['view', ...arguments_], { encoding: 'utf8' }).trim();
 
-const fuiVersion = npmView('@effindomv2/fui-as', 'dist-tags.latest');
-const runtimeVersion = npmView(`@effindomv2/fui-as@${fuiVersion}`, 'dependencies.@effindomv2/runtime');
+const fuiVersion = process.env.FUI_AS_VERSION ?? npmView('@effindomv2/fui-as', 'dist-tags.latest');
+const runtimeVersion = process.env.EFFINDOM_RUNTIME_VERSION
+  ?? npmView(`@effindomv2/fui-as@${fuiVersion}`, 'dependencies.@effindomv2/runtime');
 if (!versionPattern.test(fuiVersion) || !versionPattern.test(runtimeVersion)) {
   throw new Error(`npm returned invalid upstream versions: FUI-AS ${JSON.stringify(fuiVersion)}, runtime ${JSON.stringify(runtimeVersion)}`);
 }
